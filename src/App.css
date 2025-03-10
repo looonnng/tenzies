@@ -56,7 +56,7 @@
 
   display: grid;
   grid-template-columns: repeat(5, minmax(40px, 1fr));
-  gap: 1rem;
+  gap: 2rem;
 }
 
 .dice {
@@ -71,9 +71,13 @@
 }
 
 button {
-  font-family: Inter ;
+  font-family: Inter;
   font-size: 1.5rem;
   background-color: var(--color-accent-two);
-  color: var(--color-lighter);
+}
+
+.roll-btn {
   padding: 0.5rem 3rem;
+  color: var(--color-lighter);
+
 }
