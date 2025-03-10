@@ -1,23 +1,27 @@
 import Die from './Die';
 import Info from './Info';
+import getAllNewDice from '../getAllNewDice';
+import { useState } from 'react';
 
 export default function Tenzie() {
+  const [dice, setDice] = useState(getAllNewDice());
+
   return (
     <div className="tenzies flex-center">
       <Info />
       <div className="dice-wrapper">
-        <Die value={1} />
-        <Die value={2} />
-        <Die value={3} />
-        <Die value={4} />
-        <Die value={5} />
-        <Die value={6} />
-        <Die value={7} />
-        <Die value={8} />
-        <Die value={9} />
-        <Die value={1} />
+        <Die value={dice[0]} />
+        <Die value={dice[1]} />
+        <Die value={dice[2]} />
+        <Die value={dice[3]} />
+        <Die value={dice[4]} />
+        <Die value={dice[5]} />
+        <Die value={dice[6]} />
+        <Die value={dice[7]} />
+        <Die value={dice[8]} />
+        <Die value={dice[9]} />
       </div>
-      <button className='roll-btn'>Roll</button>
+      <button className="roll-btn">Roll</button>
     </div>
   );
 }
