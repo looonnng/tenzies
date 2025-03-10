@@ -6,7 +6,18 @@ import { useWindowSize } from 'react-use';
 import Confetti from 'react-confetti';
 
 export default function Tenzie() {
-  const [dice, setDice] = useState(getAllNewDice());
+  const { width, height } = useWindowSize();
+  const [dice, setDice] = useState(() => getAllNewDice());
+  const rollAndNewGameBtn = useRef(null);
+  const isGameWon =
+    dice.every((die) => die.value === dice[0].value) &&
+    dice.every((die) => die.isHeld);
+
+  useEffect(() => {
+    if (isGameWon) {
+      rollAndNewGameBtn.current.focus();
+    }
+  }, [isGameWon]);
 
   const diceElements = dice.map((dieObj) => (
     <Die
@@ -17,12 +28,6 @@ export default function Tenzie() {
       id={dieObj.id}
     />
   ));
-
-  function checkGameWon() {
-    setIsGameWon(
-      dice.every((die, index, arr) => die.value === arr[0]['value']),
-    );
-  }
 
   function rollDice() {
     if (isGameWon) {
@@ -36,28 +41,31 @@ export default function Tenzie() {
     );
   }
 
-  function newGame() {
-    setDice(getAllNewDice());
-    setIsGameWon(false);
-  }
-
   function hold(id) {
     setDice((prevDice) =>
       prevDice.map((die) =>
         die.id === id ? { ...die, isHeld: !die.isHeld } : die,
       ),
     );
-
-    checkGameWon();
   }
 
   return (
-    <div className="tenzies flex-center">
-      <Info />
-      <div className="dice-wrapper">{diceElements}</div>
-      <button onClick={rollDice} className="roll-btn">
-        Roll
-      </button>
-    </div>
+    <>
+      {isGameWon && <Confetti width={width} height={height}></Confetti>}
+      <div aria-live="polite">
+        {isGameWon && (
+          <p className="sr-only">
+            Congratulations! You won! Press "New Game" to start again.
+          </p>
+        )}
+      </div>
+      <div className="tenzies flex-center">
+        <Info />
+        <div className="dice-wrapper">{diceElements}</div>
+        <button onClick={rollDice} className="roll-btn" ref={rollAndNewGameBtn}>
+          {isGameWon ? 'New Game' : 'Roll'}
+        </button>
+      </div>
+    </>
   );
 }
