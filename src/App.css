@@ -66,7 +66,7 @@
   border-radius: 8px;
 }
 
-.frozen-die {
+.checked-dice {
   background-color: var(--color-accent);
 }
 

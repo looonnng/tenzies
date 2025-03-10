@@ -1,27 +1,44 @@
 import Die from './Die';
 import Info from './Info';
-import getAllNewDice from '../getAllNewDice';
+import { getRandomDie, getAllNewDice } from '../getAllNewDice';
 import { useState } from 'react';
 
 export default function Tenzie() {
   const [dice, setDice] = useState(getAllNewDice());
 
+  const diceElements = dice.map((dieObj) => (
+    <Die
+      key={dieObj.id}
+      value={dieObj.value}
+      isHeld={dieObj.isHeld}
+      hold={hold}
+      id={dieObj.id}
+    />
+  ));
+
+  function rollDice() {
+    setDice((prevDice) =>
+      prevDice.map((die) =>
+        die.isHeld ? die : { ...die, value: getRandomDie() },
+      ),
+    );
+  }
+
+  function hold(id) {
+    setDice((prevDice) =>
+      prevDice.map((die) =>
+        die.id === id ? { ...die, isHeld: !die.isHeld } : die,
+      ),
+    );
+  }
+
   return (
     <div className="tenzies flex-center">
       <Info />
-      <div className="dice-wrapper">
-        <Die value={dice[0]} />
-        <Die value={dice[1]} />
-        <Die value={dice[2]} />
-        <Die value={dice[3]} />
-        <Die value={dice[4]} />
-        <Die value={dice[5]} />
-        <Die value={dice[6]} />
-        <Die value={dice[7]} />
-        <Die value={dice[8]} />
-        <Die value={dice[9]} />
-      </div>
-      <button className="roll-btn">Roll</button>
+      <div className="dice-wrapper">{diceElements}</div>
+      <button onClick={rollDice} className="roll-btn">
+        Roll
+      </button>
     </div>
   );
 }
