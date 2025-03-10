@@ -5,7 +5,6 @@ import { useState } from 'react';
 
 export default function Tenzie() {
   const [dice, setDice] = useState(getAllNewDice());
-
   const diceElements = dice.map((dieObj) => (
     <Die
       key={dieObj.id}
@@ -15,6 +14,10 @@ export default function Tenzie() {
       id={dieObj.id}
     />
   ));
+
+  const isGameWon =
+    dice.every((die) => die.value === dice[0].value) &&
+    dice.every((die) => die.isHeld);
 
   function rollDice() {
     setDice((prevDice) =>
@@ -32,12 +35,16 @@ export default function Tenzie() {
     );
   }
 
+  function restart() {
+    setDice(getAllNewDice());
+  }
+
   return (
     <div className="tenzies flex-center">
       <Info />
       <div className="dice-wrapper">{diceElements}</div>
-      <button onClick={rollDice} className="roll-btn">
-        Roll
+      <button onClick={isGameWon ? restart : rollDice} className="roll-btn">
+        {isGameWon ? 'New Game' : 'Roll'}
       </button>
     </div>
   );
