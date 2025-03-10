@@ -14,7 +14,7 @@ function getAllNewDice() {
   */
 
   return new Array(10).fill(0).map(() => ({
-    value: Math.ceil(Math.random() * 6),
+    value: 1,
     isHeld: false,
     id: crypto.randomUUID(),
   }));
