@@ -1,11 +1,12 @@
 import Die from './Die';
 import Info from './Info';
 import { getRandomDie, getAllNewDice } from '../getAllNewDice';
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
+import { useWindowSize } from 'react-use';
+import Confetti from 'react-confetti';
 
 export default function Tenzie() {
   const [dice, setDice] = useState(getAllNewDice());
-  const [isGameWon, setIsGameWon] = useState(false);
 
   const diceElements = dice.map((dieObj) => (
     <Die
@@ -24,6 +25,10 @@ export default function Tenzie() {
   }
 
   function rollDice() {
+    if (isGameWon) {
+      setDice(getAllNewDice());
+    }
+
     setDice((prevDice) =>
       prevDice.map((die) =>
         die.isHeld ? die : { ...die, value: getRandomDie() },
@@ -50,8 +55,8 @@ export default function Tenzie() {
     <div className="tenzies flex-center">
       <Info />
       <div className="dice-wrapper">{diceElements}</div>
-      <button onClick={isGameWon ? newGame : rollDice} className="roll-btn">
-        {isGameWon ? 'New Game' : 'Roll'}
+      <button onClick={rollDice} className="roll-btn">
+        Roll
       </button>
     </div>
   );
